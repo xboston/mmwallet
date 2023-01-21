@@ -6,8 +6,7 @@ import {
     getWalletInitStatus,
     getApiStatus,
 } from '$lib/server/statuses';
-import { getLastestPayments } from '$lib/server/latests';
-
+import { getLastestPayments, getLastestWallets } from '$lib/server/latests';
 import { getiOSVersion, getAndroidVersion } from '$lib/server/apps';
 
 let updatedAt: string;
@@ -50,16 +49,18 @@ const getUpdateStatuses = async () => {
 };
 
 const getUpdateLatests = async () => {
-    const [payments, ios, android] = await Promise.all([
+    const [payments, wallets, ios, android] = await Promise.all([
         getLastestPayments(),
+        getLastestWallets(),
         getiOSVersion(),
         getAndroidVersion(),
     ]);
 
     latests = {
-        payments,
         ios,
         android,
+        wallets,
+        payments,
         time: new Date(),
         timeLocal: new Date().toLocaleString('ru-RU', { timeZone: 'UTC' }),
     };
