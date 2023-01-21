@@ -24,7 +24,12 @@ declare global {
                 status: boolean;
                 time: Date;
             };
+            api: {
+                api: boolean;
+                apiSolana: boolean;
+            };
             time: Date;
+            timeLocal: string;
         }
     }
 }

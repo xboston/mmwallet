@@ -47,3 +47,14 @@ export const getWalletInitStatus = async () => {
         time: new Date(),
     };
 };
+
+// статусы доступности системных сервисов
+export const getApiStatus = async () => {
+    const n2StatusURL = 'https://api-dev.n2.org/pub/solana-liveness/n2/status';
+    const n2SolanaStatusURL = 'https://api-dev.n2.org/pub/solana-liveness/solana/status';
+
+    return {
+        api: (await (await fetch(n2StatusURL)).json())['status'] === 'GREEN',
+        apiSolana: (await (await fetch(n2SolanaStatusURL)).json())['status'] === 'GREEN',
+    };
+};

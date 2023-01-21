@@ -1,7 +1,14 @@
 import type { Handle } from '@sveltejs/kit';
 
-import { getSolanaStatus, getPaymentsStatus, getWalletInitStatus } from '$lib/server/statuses';
+import {
+    getSolanaStatus,
+    getPaymentsStatus,
+    getWalletInitStatus,
+    getApiStatus,
+} from '$lib/server/statuses';
 import { getLastestPayments } from '$lib/server/latests';
+
+import { getiOSVersion, getAndroidVersion } from '$lib/server/apps';
 
 let updatedAt: string;
 let statuses: App.Statuses;
@@ -21,35 +28,43 @@ export const handle: Handle = async ({ event, resolve }): Promise<Response> => {
 };
 
 const getUpdateStatuses = async () => {
-    const [solana, payments, wallets] = await Promise.all([
+    const [solana, payments, wallets, api] = await Promise.all([
         getSolanaStatus(),
         getPaymentsStatus(),
         getWalletInitStatus(),
+        getApiStatus(),
     ]);
 
     statuses = {
         solana,
         payments,
         wallets,
+        api,
         time: new Date(),
+        timeLocal: new Date().toLocaleString(),
     };
 
-    console.log('getUpdateStatuses:now', statuses);
-    updatedAt = new Date().toUTCString();
+    // console.log('getUpdateStatuses:now', statuses);
 
     return statuses;
 };
 
 const getUpdateLatests = async () => {
-    const [payments] = await Promise.all([getLastestPayments()]);
+    const [payments, ios, android] = await Promise.all([
+        getLastestPayments(),
+        getiOSVersion(),
+        getAndroidVersion(),
+    ]);
 
     latests = {
         payments,
+        ios,
+        android,
         time: new Date(),
+        timeLocal: new Date().toLocaleString('ru-RU', { timeZone: 'UTC' }),
     };
 
-    console.log('getUpdateLatests:now', latests);
-    updatedAt = new Date().toUTCString();
+    // console.log('getUpdateLatests:now', latests);
 
     return latests;
 };
@@ -57,4 +72,6 @@ const getUpdateLatests = async () => {
 setInterval(async () => {
     await getUpdateLatests();
     await getUpdateStatuses();
+
+    updatedAt = new Date().toUTCString();
 }, 30 * 1000);

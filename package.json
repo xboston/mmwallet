@@ -29,6 +29,7 @@
     },
     "type": "module",
     "dependencies": {
+        "google-play-scraper": "^9.1.1",
         "install": "^0.13.0"
     }
 }
