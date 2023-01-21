@@ -4,8 +4,14 @@
     /** @type {import('./$types').PageData} */
     export let data;
 
+    /** @type ReturnType<typeof setTimeout> */
+    let timer;
+
     function rerunLoadFunction() {
-        invalidateAll();
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            invalidateAll();
+        }, 500);
     }
     // setInterval(async () => {
     //     await rerunLoadFunction();
