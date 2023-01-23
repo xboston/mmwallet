@@ -18,7 +18,7 @@
     // }, 2000);
 </script>
 
-<h3 on:click={rerunLoadFunction}>Обновлено в {data.now}</h3>
+<h3 on:click={rerunLoadFunction}>Обновлено в {new Date(data.now).toLocaleString()}</h3>
 
 <section id="preview" class="grid">
     <div>
@@ -58,7 +58,7 @@
             <th scope="row">{i+1}</th>
             <td> <a target="_blank" rel="noopener noreferrer" href="//solscan.io/tx/{item.signature}">{item.signature_short}</a></td>
             <td>${item.amount_usd}</td>
-            <td>{item.time_local}</td>
+            <td>{new Date(item.time).toLocaleString()}</td>
         </tr>
         <tr>
         {/each}
@@ -87,7 +87,7 @@
             <td> <a target="_blank" rel="noopener noreferrer" href="//solscan.io/tx/{item.signature}">{item.signature_short}</a></td>
             <td>{item.plan}</td>
             <td>${item.amount_usd}</td>
-            <td>{item.time_local}</td>
+            <td>{new Date(item.time).toLocaleString()}</td>
         </tr>
         <tr>
         {/each}

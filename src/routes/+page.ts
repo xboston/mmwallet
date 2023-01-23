@@ -8,7 +8,7 @@ export const load = (async ({ fetch, params }) => {
     const latest = await resLatest.json();
 
     return {
-        now: new Date().toLocaleString('ru-RU', { timeZone: 'UTC' }),
+        now: Date.now(),
         statuses: status,
         latest: latest.latests,
     };
