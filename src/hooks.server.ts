@@ -81,5 +81,3 @@ setTimeout(async () => {
     updatedAt = new Date().toUTCString();
     console.log('data:updates:init', updatedAt);
 }, 250);
-
-console.log('=========> hook!');
