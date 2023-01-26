@@ -25,9 +25,6 @@ export const getLastestPayments = async () => {
                 amount: trx.changeAmount,
                 amount_usd: Math.floor(trx.changeAmount / 10000) / 100,
                 time: new Date(trx.blockTime * 1000),
-                time_local: new Date(trx.blockTime * 1000).toLocaleString('ru-RU', {
-                    timeZone: 'UTC',
-                }),
                 // showed: trx.changeAmount > 0 && parseInt(trx.postBalance, 10) > parseInt(trx.preBalance, 10),
                 // from: trx,
             };
@@ -63,9 +60,6 @@ export const getLastestWallets = async () => {
                 amount_usd: Math.floor(trx.changeAmount / 10000) / 100,
                 plan: getPlanName(trx.changeAmount),
                 time: new Date(trx.blockTime * 1000),
-                time_local: new Date(trx.blockTime * 1000).toLocaleString('ru-RU', {
-                    timeZone: 'UTC',
-                }),
                 // showed: trx.changeAmount > 0 && parseInt(trx.postBalance, 10) > parseInt(trx.preBalance, 10),
                 // from: trx,
             };

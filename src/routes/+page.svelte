@@ -11,7 +11,7 @@
         clearTimeout(timer);
         timer = setTimeout(() => {
             invalidateAll();
-        }, 500);
+        }, 250);
     }
     // setInterval(async () => {
     //     await rerunLoadFunction();
@@ -32,15 +32,11 @@
     </div>
     <div>
         <ul>
-            <li>Версия в Apple Store: <a target="_blank" rel="noopener noreferrer" href="//apps.apple.com/app/id510623322" data-tooltip="{data.latest.ios.releaseDateShort}">{data.latest.ios.latest}</a></li>
-            <li>Версия в Google Play: <a target="_blank" rel="noopener noreferrer" href="//play.google.com/store/apps/details?id=com.mapswithme.maps.pro" data-tooltip="{data.latest.android.releaseDateShort}">{data.latest.android.latest}</a></li>
+            <li>Версия в Apple Store: <a target="_blank" rel="noopener noreferrer" href="{data.latest.ios.href}" data-tooltip="{data.latest.ios.releaseDate}">{data.latest.ios.latest}</a></li>
+            <li>Версия в Google Play: <a target="_blank" rel="noopener noreferrer" href="{data.latest.android.href}" data-tooltip="{data.latest.android.releaseDate}">{data.latest.android.latest}</a></li>
         </ul>
     </div>
 </section>
-<!-- <details>
-    <summary style="opacity: 0.1;" >Как это работает</summary>
-    <p>Lorem ipsum — классический текст-«рыба». Является искажённым отрывком из философского трактата Марка Туллия Цицерона «О пределах добра и зла», написанного в 45 году до н. э. на латинском языке, обнаружение сходства приписывается Ричарду Макклинтоку.</p>
-</details> -->
 
 <h4>Свежие платежи</h4>
 <table role="grid">
@@ -64,12 +60,8 @@
         {/each}
     </tbody>
 </table>
-<!-- <details>
-    <summary style="opacity: 0.1;" >Как это работает</summary>
-    <p>Lorem ipsum — классический текст-«рыба». Является искажённым отрывком из философского трактата Марка Туллия Цицерона «О пределах добра и зла», написанного в 45 году до н. э. на латинском языке, обнаружение сходства приписывается Ричарду Макклинтоку.</p>
-</details> -->
 
-<h4>Свежие кошельки</h4>
+<h4>Свежие регистрации</h4>
 <table role="grid">
     <thead>
         <tr>

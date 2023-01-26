@@ -10,8 +10,8 @@ import { getLastestPayments, getLastestWallets } from '$lib/server/latests';
 import { getiOSVersion, getAndroidVersion } from '$lib/server/apps';
 
 let updatedAt: string;
-let statuses: App.Statuses;
-let latests: object;
+let statuses: App.Locals['statuses'];
+let latests: App.Locals['latests'];
 
 export const handle: Handle = async ({ event, resolve }): Promise<Response> => {
     // статусы
@@ -40,10 +40,7 @@ const getUpdateStatuses = async () => {
         wallets,
         api,
         time: new Date(),
-        timeLocal: new Date().toLocaleString(),
     };
-
-    // console.log('getUpdateStatuses:now', statuses);
 
     return statuses;
 };
@@ -62,17 +59,27 @@ const getUpdateLatests = async () => {
         wallets,
         payments,
         time: new Date(),
-        timeLocal: new Date().toLocaleString('ru-RU', { timeZone: 'UTC' }),
     };
-
-    // console.log('getUpdateLatests:now', latests);
 
     return latests;
 };
 
+// этот таймаут будет обновлять данные каждые полминуты
 setInterval(async () => {
     await getUpdateLatests();
     await getUpdateStatuses();
 
     updatedAt = new Date().toUTCString();
+    console.log('data:updates:tick', updatedAt);
 }, 30 * 1000);
+
+// обновит данные после старта приложения
+setTimeout(async () => {
+    await getUpdateLatests();
+    await getUpdateStatuses();
+
+    updatedAt = new Date().toUTCString();
+    console.log('data:updates:init', updatedAt);
+}, 250);
+
+console.log('=========> hook!');
