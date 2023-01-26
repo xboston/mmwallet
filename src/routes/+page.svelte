@@ -27,7 +27,7 @@
     // }, 2000);
 </script>
 
-<h3>Обновлено <Time relative timestamp={data.now} /></h3>
+<h3>Обновлено <Time live relative timestamp={data.now} /></h3>
 <section class="grid">
     <div>
         <ul>
