@@ -6,8 +6,6 @@
     import "dayjs/locale/ru";
     dayjs.locale("ru");
 
-
-
     import { invalidateAll } from '$app/navigation';
 
     /** @type {import('./$types').PageData} */
