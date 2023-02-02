@@ -46,20 +46,24 @@ const getUpdateStatuses = async () => {
 };
 
 const getUpdateLatests = async () => {
-    const [payments, wallets, ios, android] = await Promise.all([
+    await Promise.all([
         getLastestPayments(),
         getLastestWallets(),
         getiOSVersion(),
         getAndroidVersion(),
-    ]);
-
-    latests = {
-        ios,
-        android,
-        wallets,
-        payments,
-        time: new Date(),
-    };
+    ])
+        .then(([payments, wallets, ios, android]) => {
+            latests = {
+                ios,
+                android,
+                wallets,
+                payments,
+                time: new Date(),
+            };
+        })
+        .catch((error) => {
+            console.log('getUpdateLatests:error', error.message);
+        });
 
     return latests;
 };
