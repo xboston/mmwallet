@@ -6,6 +6,7 @@ declare global {
     namespace App {
         // interface Error {}
         interface Locals {
+            updatedAt: String;
             statuses: {
                 solana: {
                     status: boolean;

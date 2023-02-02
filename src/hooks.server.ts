@@ -20,6 +20,9 @@ export const handle: Handle = async ({ event, resolve }): Promise<Response> => {
     // свежие данные
     event.locals.latests = latests ?? (await getUpdateLatests());
 
+    // последнее обновление
+    event.locals.updatedAt = updatedAt;
+
     const response = await resolve(event);
     response.headers.set('x-cache-update', updatedAt);
 

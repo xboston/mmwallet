@@ -1,6 +1,6 @@
 import type { PageLoad } from './$types';
 
-export const load = (async ({ fetch, params }) => {
+export const load = (async ({ fetch, locals }) => {
     const resStatus = await fetch(`/api/status`);
     const status = await resStatus.json();
 
@@ -8,7 +8,7 @@ export const load = (async ({ fetch, params }) => {
     const latest = await resLatest.json();
 
     return {
-        now: Date.now(),
+        now: locals.updatedAt,
         statuses: status,
         latest: latest.latests,
     };
