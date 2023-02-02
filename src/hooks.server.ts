@@ -27,20 +27,24 @@ export const handle: Handle = async ({ event, resolve }): Promise<Response> => {
 };
 
 const getUpdateStatuses = async () => {
-    const [solana, payments, wallets, api] = await Promise.all([
+    await Promise.all([
         getSolanaStatus(),
         getPaymentsStatus(),
         getWalletInitStatus(),
         getApiStatus(),
-    ]);
-
-    statuses = {
-        solana,
-        payments,
-        wallets,
-        api,
-        time: new Date(),
-    };
+    ])
+        .then(([solana, payments, wallets, api]) => {
+            statuses = {
+                solana,
+                payments,
+                wallets,
+                api,
+                time: new Date(),
+            };
+        })
+        .catch((error) => {
+            console.log('getUpdateStatuses:error', error.message);
+        });
 
     return statuses;
 };
