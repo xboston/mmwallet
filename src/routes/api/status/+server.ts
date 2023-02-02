@@ -5,6 +5,6 @@ import { json } from '@sveltejs/kit';
 export const GET: RequestHandler = async (event) => {
     return json({
         statuses: event.locals.statuses,
-        updatedOn: Date.now(),
+        updatedOn: event.locals.updatedAt,
     });
 };
