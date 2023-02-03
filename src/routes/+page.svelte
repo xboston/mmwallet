@@ -25,6 +25,11 @@
     // }, 2000);
 </script>
 
+<svelte:head>
+    <title>MAPS.ME wallet monitor</title>
+    <meta name="description" content="Неофициальный сервис мониторинга состояние проекта MAPS.ME wallet">
+</svelte:head>
+
 <h3>Обновлено <Time live relative timestamp={data.now} /></h3>
 <section class="grid">
     <div>
