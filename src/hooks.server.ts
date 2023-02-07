@@ -30,7 +30,7 @@ const getUpdateStatuses = async () => {
             };
         })
         .catch((error) => {
-            console.log('getUpdateStatuses:error', error.message);
+            // console.log('getUpdateStatuses:error', error.message);
         });
 
     return statuses;
@@ -53,7 +53,7 @@ const getUpdateLatests = async () => {
             };
         })
         .catch((error) => {
-            console.log('getUpdateLatests:error', error.message);
+            // console.log('getUpdateLatests:error', error.message);
         });
 
     return latests;
@@ -81,7 +81,7 @@ setInterval(async () => {
     await getUpdateStatuses();
 
     updatedAt = new Date().toUTCString();
-    console.log('data:updates:tick', updatedAt);
+    // console.log('data:updates:tick', updatedAt);
 }, 30 * 1000);
 
 // обновит данные после старта приложения
@@ -90,5 +90,5 @@ setTimeout(async () => {
     await getUpdateStatuses();
 
     updatedAt = new Date().toUTCString();
-    console.log('data:updates:init', updatedAt);
+    // console.log('data:updates:init', updatedAt);
 }, 250);
