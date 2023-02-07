@@ -29,8 +29,8 @@ const getUpdateStatuses = async () => {
                 time: new Date(),
             };
         })
-        .catch((error) => {
-            // console.log('getUpdateStatuses:error', error.message);
+        .catch((_error) => {
+            // console.log('getUpdateStatuses:error', _error.message);
         });
 
     return statuses;
@@ -52,8 +52,8 @@ const getUpdateLatests = async () => {
                 time: new Date(),
             };
         })
-        .catch((error) => {
-            // console.log('getUpdateLatests:error', error.message);
+        .catch((_error) => {
+            // console.log('getUpdateLatests:error', _error.message);
         });
 
     return latests;
