@@ -13,22 +13,6 @@ let updatedAt: string;
 let statuses: App.Locals['statuses'];
 let latests: App.Locals['latests'];
 
-export const handle: Handle = async ({ event, resolve }): Promise<Response> => {
-    // статусы
-    event.locals.statuses = statuses ?? (await getUpdateStatuses());
-
-    // свежие данные
-    event.locals.latests = latests ?? (await getUpdateLatests());
-
-    // последнее обновление
-    event.locals.updatedAt = updatedAt;
-
-    const response = await resolve(event);
-    response.headers.set('x-cache-update', updatedAt);
-
-    return response;
-};
-
 const getUpdateStatuses = async () => {
     await Promise.all([
         getSolanaStatus(),
@@ -73,6 +57,22 @@ const getUpdateLatests = async () => {
         });
 
     return latests;
+};
+
+export const handle: Handle = async ({ event, resolve }): Promise<Response> => {
+    // статусы
+    event.locals.statuses = statuses ?? (await getUpdateStatuses());
+
+    // свежие данные
+    event.locals.latests = latests ?? (await getUpdateLatests());
+
+    // последнее обновление
+    event.locals.updatedAt = updatedAt;
+
+    const response = await resolve(event);
+    response.headers.set('x-cache-update', updatedAt);
+
+    return response;
 };
 
 // этот таймаут будет обновлять данные каждые полминуты

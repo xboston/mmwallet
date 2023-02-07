@@ -3,6 +3,33 @@ const initWalletsAccount = 'D49P3MvLWanK8XfF6XhG4YnLsYfmH2VZRLr8N16tqM3e';
 
 const limit = 10;
 
+const truncateHash = (hash: string) => {
+    return hash.substring(0, 4) + '...' + hash.substring(hash.length - 4);
+};
+
+const getPlanName = (amount: number) => {
+    let name = 'uncn';
+    switch (amount) {
+        case 10000000:
+            name = 'Free';
+            break;
+        case 36000000:
+            name = 'Happy Camper';
+            break;
+        case 150000000:
+            name = 'Digital Nomad';
+            break;
+        case 360000000:
+            name = 'High Flyer';
+            break;
+
+        default:
+            break;
+    }
+
+    return name;
+};
+
 // свежие платежи по картам
 export const getLastestPayments = async () => {
     const trxLimit = limit * 2;
@@ -70,31 +97,4 @@ export const getLastestWallets = async () => {
         data,
         time: new Date(),
     };
-};
-
-const truncateHash = (hash: string) => {
-    return hash.substring(0, 4) + '...' + hash.substring(hash.length - 4);
-};
-
-const getPlanName = (amount: number) => {
-    let name = 'uncn';
-    switch (amount) {
-        case 10000000:
-            name = 'Free';
-            break;
-        case 36000000:
-            name = 'Happy Camper';
-            break;
-        case 150000000:
-            name = 'Digital Nomad';
-            break;
-        case 360000000:
-            name = 'High Flyer';
-            break;
-
-        default:
-            break;
-    }
-
-    return name;
 };
