@@ -1,37 +1,33 @@
 {
     "name": "vercel",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "private": true,
+    "type": "module",
     "scripts": {
-        "dev": "vite dev",
         "build": "vite build",
-        "preview": "vite preview",
         "check": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json",
         "check:watch": "svelte-kit sync && svelte-check --tsconfig ./jsconfig.json --watch",
+        "dev": "vite dev",
+        "format": "prettier --plugin-search-dir . --write .",
         "lint": "prettier --plugin-search-dir . --check . && eslint .",
-        "format": "prettier --plugin-search-dir . --write ."
+        "preview": "vite preview"
     },
     "devDependencies": {
         "@picocss/pico": "^1.5.7",
         "@sveltejs/adapter-auto": "^1.0.3",
         "@sveltejs/adapter-vercel": "next",
-        "@sveltejs/kit": "^1.7.0",
+        "@sveltejs/kit": "^1.7.2",
+        "dayjs": "^1.11.7",
         "eslint": "^8.34.0",
         "eslint-config-prettier": "^8.6.0",
         "eslint-plugin-svelte3": "^4.0.0",
+        "google-play-scraper": "^9.1.1",
         "prettier": "^2.8.4",
         "prettier-plugin-svelte": "^2.9.0",
-        "sass": "^1.58.1",
+        "sass": "^1.58.3",
         "svelte": "^3.55.1",
         "svelte-check": "^3.0.3",
         "typescript": "^4.9.5",
-        "vite": "^4.1.1"
-    },
-    "type": "module",
-    "dependencies": {
-        "dayjs": "^1.11.7",
-        "google-play-scraper": "^9.1.1",
-        "install": "^0.13.0",
-        "svelte-time": "^0.7.1"
+        "vite": "^4.1.2"
     }
 }

@@ -1,9 +1,9 @@
 <script>
-
-    import Time from "svelte-time";
-
-    import { dayjs } from "svelte-time";
+    import dayjs from 'dayjs'
     import "dayjs/locale/ru";
+    import relativeTime from 'dayjs/plugin/relativeTime';
+
+    dayjs.extend(relativeTime);
     dayjs.locale("ru");
 
     import { invalidateAll } from '$app/navigation';
@@ -20,9 +20,6 @@
             invalidateAll();
         }, 250);
     }
-    // setInterval(async () => {
-    //     await rerunLoadFunction();
-    // }, 2000);
 </script>
 
 <svelte:head>
@@ -30,7 +27,7 @@
     <meta name="description" content="Неофициальный сервис мониторинга состояние проекта MAPS.ME wallet">
 </svelte:head>
 
-<h3>Обновлено <Time live relative timestamp={data.now} /></h3>
+<h3>Обновлено { dayjs().to(data.now) }</h3>
 <section class="grid">
     <div>
         <ul>
@@ -60,12 +57,12 @@
         </tr>
     </thead>
     <tbody>
-        {#each data.latest.payments.data as item, i}
+        {#each data.latest.payments.data as payment, i}
         <tr>
             <th scope="row">{i+1}</th>
-            <td> <a target="_blank" rel="noopener noreferrer" href="//solscan.io/tx/{item.signature}">{item.signature_short}</a></td>
-            <td>${item.amount_usd}</td>
-            <td><Time live relative timestamp="{item.time}" title="{item.time}" /></td>
+            <td><a target="_blank" rel="noopener noreferrer" href="//solscan.io/tx/{payment.signature}">{payment.signature_short}</a></td>
+            <td>${payment.amount_usd}</td>
+            <td>{ dayjs().to(payment.time) }</td>
         </tr>
         <tr>
         {/each}
@@ -84,13 +81,13 @@
         </tr>
     </thead>
     <tbody>
-        {#each data.latest.wallets.data as item, i}
+        {#each data.latest.wallets.data as wallet, i}
         <tr>
             <th scope="row">{i+1}</th>
-            <td> <a target="_blank" rel="noopener noreferrer" href="//solscan.io/tx/{item.signature}">{item.signature_short}</a></td>
-            <td>{item.plan}</td>
-            <td>${item.amount_usd}</td>
-            <td><Time live relative timestamp="{item.time}" title="{item.time}" /></td>
+            <td><a target="_blank" rel="noopener noreferrer" href="//solscan.io/tx/{wallet.signature}">{wallet.signature_short}</a></td>
+            <td>{wallet.plan}</td>
+            <td>${wallet.amount_usd}</td>
+            <td>{ dayjs().to(wallet.time) }</td>
         </tr>
         <tr>
         {/each}
@@ -102,4 +99,4 @@
 </details> -->
 
 
-<button on:click={rerunLoadFunction}>Обновить данные</button>
+<button style="background-color: #296129;" on:click={rerunLoadFunction}>Обновить данные</button>
