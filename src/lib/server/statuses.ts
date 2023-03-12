@@ -1,77 +1,96 @@
+import { QUICKNODE_URL } from '$env/static/private';
+
+import web3, { PublicKey } from '@solana/web3.js';
+
+// системные кошельки приложения
 const coreWallets = {
     payments: '4xoejpfekwW4kUizMNhRhtmXbnJhEdZ2A65XugEZFdyX',
     walletInit: 'D49P3MvLWanK8XfF6XhG4YnLsYfmH2VZRLr8N16tqM3e',
 };
 
-const solscanAPIURLbase = 'https://public-api.solscan.io';
-const solanaStatusURL = 'https://status.solana.com/api/v2/status.json';
-const n2StatusURL = 'https://api-dev.n2.org/pub/solana-liveness/n2/status';
-const n2SolanaStatusURL = 'https://api-dev.n2.org/pub/solana-liveness/solana/status';
+// адресоа токенов
+const tokens = {
+    usdc: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+};
+
+// цена выпуска карты
+const cardPrice = 10000000;
 
 const checkTransactionsLimit = 10;
+
+let solana = new web3.Connection(QUICKNODE_URL, 'confirmed');
 
 // статус работы платёжного аккаунта
 export const getPaymentsStatus = async () => {
     const now = Math.floor(Date.now() / 1000);
-    const paymentCheckURL = `${solscanAPIURLbase}/account/splTransfers?account=${coreWallets.payments}&limit=${checkTransactionsLimit}&offset=0`;
+    const transactions = await getLatestTransactions(coreWallets.payments);
 
-    const res = await fetch(paymentCheckURL);
-    const result = await res.json();
-
-    // ищем в списке последних транзакций есть платёжная необходимой свежести
-    const status = result['data'].some((trx: any) => {
-        const diff = now - trx.blockTime; // время с последнего блока платежей до текущего
-        return diff < 300 && trx.changeType === 'inc'; // в течении последних 5 минут было хотя бы одна оплата
+    // ищем в списке последних транзакций входящий платёж необходимой свежести
+    const status = transactions.some((trx: any) => {
+        const diff = now - trx.blockTime;
+        return diff < 21600 && trx.changeType === 'inc';
     });
 
     return {
         status,
+        transactions,
         time: new Date(),
     };
+};
+
+/**
+ * Получение списка последних транзакций по адресу аккаунта
+ * @param address string
+ * @returns
+ */
+export const getLatestTransactions = async (address: string) => {
+    const base58publicKey = new PublicKey(address);
+
+    const signatures = await solana.getSignaturesForAddress(base58publicKey, {
+        limit: checkTransactionsLimit,
+    });
+
+    const signaturesList = signatures.map((signature) => signature.signature);
+    const transactions = await solana.getParsedTransactions(signaturesList);
+
+    let transactionList: any = [];
+    transactions.map((transaction) => {
+        if (transaction !== null && typeof transaction !== 'undefined') {
+            const trans = transaction?.transaction.message.instructions.find((instruction) =>
+                instruction?.programId.equals(new PublicKey(tokens.usdc))
+            );
+            const transactionShortData = {
+                time: new Date(transaction?.blockTime * 1000),
+                blockTime: transaction?.blockTime,
+                changeType: trans?.parsed.info.destination === address ? 'inc' : 'desc',
+                changeAmount: trans?.parsed.info.amount,
+                amount_usd: Math.floor(trans?.parsed.info.amount / 10000) / 100,
+                signature: transaction?.transaction.signatures[0],
+                // transaction: trans,
+                // transactionFull: transaction,
+            };
+
+            transactionList.push(transactionShortData);
+        }
+    });
+
+    return transactionList;
 };
 
 // статус работы регистратора кошельков
-export const getWalletInitStatus = async () => {
+export const getWalletsInitStatus = async () => {
     const now = Math.floor(Date.now() / 1000);
-    const paymentCheckURL = `${solscanAPIURLbase}/account/splTransfers?account=${coreWallets.walletInit}&limit=${checkTransactionsLimit}&offset=0`;
+    const transactions = await getLatestTransactions(coreWallets.walletInit);
 
-    const res = await fetch(paymentCheckURL);
-    const result = await res.json();
-
-    // ищем в списке последних транзакций есть платёжная необходимой свежести
-    const status = result['data'].some((trx: any) => {
+    // ищем в списке последних транзакций есть транзакция выпуска карты
+    const status = transactions.some((trx: any) => {
         const diff = now - trx.blockTime;
-        return diff < 21600 && trx.changeType === 'inc' && trx.changeAmount === 10000000;
+        return diff < 21600 && trx.changeType === 'inc' && trx.changeAmount === cardPrice;
     });
 
     return {
         status,
-        time: new Date(),
-    };
-};
-
-// статус работы блокчейна Solana
-export const getSolanaStatus = async () => {
-    const res = await fetch(solanaStatusURL);
-    const data = await res.json();
-    const status = data['status']['description'] === 'All Systems Operational';
-
-    return {
-        status,
-        time: new Date(),
-    };
-};
-
-// статусы доступности системных сервисов
-export const getApiStatus = async () => {
-    // @todo - сомнительно
-    const [api, apiSolana] = await Promise.all(
-        [n2StatusURL, n2SolanaStatusURL].map((u) => fetch(u))
-    ).then((responses) => Promise.all(responses.map((res) => res.json())));
-
-    return {
-        api: api['status'] === 'GREEN',
-        apiSolana: apiSolana['status'] === 'GREEN',
+        transactions,
         time: new Date(),
     };
 };
