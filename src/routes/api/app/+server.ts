@@ -1,4 +1,3 @@
-import type { RequestHandler } from '@sveltejs/kit';
 import { json } from '@sveltejs/kit';
 
 import { getiOSVersion, getAndroidVersion } from '$lib/server/apps';
@@ -17,8 +16,7 @@ let latests = {
     },
 };
 
-/** @type {import('./$types').RequestHandler} */
-export const GET: RequestHandler = async (event) => {
+export const GET = async () => {
     if (Date.now() - latests.update > 10000 || latests.ios.href === '') {
         await Promise.all([getiOSVersion(), getAndroidVersion()])
             .then(([ios, android]) => {

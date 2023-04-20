@@ -1,11 +1,8 @@
-import type { RequestHandler } from '@sveltejs/kit';
+import { getWalletsInitStatus } from '$lib/server/statuses';
 import { json } from '@sveltejs/kit';
 
-import { getWalletsInitStatus } from '$lib/server/statuses';
-
-/** @type {import('./$types').RequestHandler} */
-export const GET: RequestHandler = async (event) => {
-    return json({
+export const GET = async (event) => {
+    return json ({
         result: await getWalletsInitStatus(),
         updatedOn: new Date(),
     });

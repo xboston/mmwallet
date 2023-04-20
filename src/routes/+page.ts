@@ -1,6 +1,4 @@
-import type { PageLoad } from './$types';
-
-export const load = (async ({ fetch }) => {
+export const load = async ({ fetch }) => {
     const appData = async () => {
         const resApp = await fetch(`/api/app`);
         return await resApp.json();
@@ -34,4 +32,4 @@ export const load = (async ({ fetch }) => {
         wallets: walletsData(),
         now: new Date(),
     };
-}) satisfies PageLoad;
+};

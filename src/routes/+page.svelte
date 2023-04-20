@@ -9,7 +9,6 @@
     import { invalidateAll } from '$app/navigation';
     import { truncateHash, getPlanName } from '$lib/utils';
 
-    /** @type {import('./$types').PageData} */
     export let data;
 
     const app = data.app.result;
